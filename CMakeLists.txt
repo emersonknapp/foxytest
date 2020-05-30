@@ -19,9 +19,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_executable(chatter_stats src/chatter_stats.cpp)
 target_include_directories(chatter_stats PUBLIC
@@ -29,10 +27,23 @@ target_include_directories(chatter_stats PUBLIC
   $<INSTALL_INTERFACE:include>)
 ament_target_dependencies(chatter_stats
   rclcpp
+  geometry_msgs
   std_msgs
 )
-
 install(TARGETS chatter_stats
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
+
+add_executable(chatterer src/chatterer.cpp)
+target_include_directories(chatterer PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(chatterer
+  rclcpp
+  geometry_msgs
+  std_msgs
+)
+install(TARGETS chatterer
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 

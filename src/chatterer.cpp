@@ -15,17 +15,18 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
 
   auto node = std::make_shared<rclcpp::Node>("topic_stats_test");
-  rclcpp::SubscriptionOptions options;
-  options.topic_stats_options.state = rclcpp::TopicStatisticsState::Enable;
-  options.topic_stats_options.publish_topic = "staty";
-  options.topic_stats_options.publish_period = 2s;
+  auto pub = node->create_publisher<MessageType>(
+    "/chatter", rclcpp::QoS(10));
+  auto clock = node->get_clock();
+  auto timer = node->create_wall_timer(1s, [pub, clock]() {
+    MessageType message;
 
-  auto sub = node->create_subscription<MessageType>(
-    "/chatter", rclcpp::QoS(10),
-    [](const MessageType::SharedPtr /* msg */) {
-      std::cout << "Got a message" << std::endl;
-    },
-    options);
+    // message.stamp = clock->now();
+    message.header.stamp = clock->now();
+
+    pub->publish(message);
+  });
+
   rclcpp::spin(node);
 
   return 0;
