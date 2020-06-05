@@ -6,8 +6,8 @@
 #include "geometry_msgs/msg/pose_stamped.hpp"
 
 // typedef std_msgs::msg::String MessageType;
-// typedef std_msgs::msg::Header MessageType;
-typedef geometry_msgs::msg::PoseStamped MessageType;
+typedef std_msgs::msg::Header MessageType;
+// typedef geometry_msgs::msg::PoseStamped MessageType;
 
 int main(int argc, char ** argv)
 {
